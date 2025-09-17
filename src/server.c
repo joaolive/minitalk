@@ -6,7 +6,7 @@
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 10:19:08 by joaolive          #+#    #+#             */
-/*   Updated: 2025/09/17 11:25:31 by joaolive         ###   ########.fr       */
+/*   Updated: 2025/09/17 14:39:22 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,24 @@ static void	ft_decode_handler(int signum, siginfo_t *info, void *context)
 {
 	static int				count;
 	static unsigned char	letter;
+	int						sig;
 
 	(void)context;
 	letter <<= 1;
 	if (signum == SIGUSR2)
 		letter |= 1;
 	count++;
+	sig = SIGUSR2;
 	if (count == 8)
 	{
 		if (!letter)
-			kill(info->si_pid, SIGUSR1);
+			sig = SIGUSR1;
 		else
-		{
-			kill(info->si_pid, SIGUSR2);
 			ft_printf("%c", letter);
-		}
 		count = 0;
 		letter = 0;
-		return ;
 	}
-	kill(info->si_pid, SIGUSR2);
+	kill(info->si_pid, sig);
 }
 
 int	main(void)

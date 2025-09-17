@@ -6,13 +6,13 @@
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 10:45:38 by joaolive          #+#    #+#             */
-/*   Updated: 2025/09/17 11:27:09 by joaolive         ###   ########.fr       */
+/*   Updated: 2025/09/17 14:42:36 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-volatile sig_atomic_t	g_flag = 0;
+volatile sig_atomic_t	g_flag = 1;
 
 static void	ft_ack_message(int signum)
 {
@@ -56,7 +56,10 @@ int	main(int argc, char **argv)
 	size_t				len;
 
 	if (argc != 3 || !ft_validate_pid(argv[1]))
+	{
+		ft_putendl_fd("Invalid PID", 2);
 		exit(1);
+	}
 	pid = getpid();
 	ft_bzero(&action, sizeof(struct sigaction));
 	action.sa_handler = ft_ack_message;
