@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 10:45:38 by joaolive          #+#    #+#             */
-/*   Updated: 2025/09/17 15:21:34 by joaolive         ###   ########.fr       */
+/*   Updated: 2025/09/19 15:11:05 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ volatile sig_atomic_t	g_flag = 0;
 
 static void	ft_ack_message(int signum)
 {
-	(void)signum;
+	if (signum == SIGUSR1)
+		ft_printf("Message received successfully!\n");
 	g_flag = 1;
 }
 
@@ -63,6 +64,7 @@ int	main(int argc, char **argv)
 	ft_bzero(&action, sizeof(struct sigaction));
 	action.sa_handler = ft_ack_message;
 	sigemptyset(&action.sa_mask);
+	sigaction(SIGUSR1, &action, NULL);
 	sigaction(SIGUSR2, &action, NULL);
 	i = 0;
 	len = ft_strlen(argv[2]);
